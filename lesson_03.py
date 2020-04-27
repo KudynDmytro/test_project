@@ -13,7 +13,8 @@ def read_file():
         return data
 
 
-# read_file()
+read_file()
+
 
 @app.route('/fake_info')
 def fake_info():
@@ -23,7 +24,7 @@ def fake_info():
         print(_, fake.name(), fake.email())
 
 
-# fake_info()
+fake_info()
 
 
 @app.route('/read_data_from_csv')
