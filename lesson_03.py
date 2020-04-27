@@ -1,39 +1,70 @@
+import csv
+from flask import Flask
+
+from faker import Faker
+
+app = Flask(__name__)
+
+
+@app.route('/read_file')
 def read_file():
-    f = open('requirements.txt', 'r')
-    data = f.read()
-    return data
+    with open('requirements.txt', 'r') as f:
+        data = f.read()
+        return data
 
 
-read_file()
+# read_file()
 
-
+@app.route('/fake_info')
 def fake_info():
-    from faker import Faker
     fake = Faker()
 
     for _ in range(1, 101):
         print(_, fake.name(), fake.email())
 
 
-fake_info()
+# fake_info()
 
 
-def avg():
+@app.route('/read_data_from_csv')
+def read_data_from_csv(filepath):
+
+    with open(filepath, "r") as f:
+        rows = [row for row in csv.DictReader(f)]
+
+    return rows
+
+
+rows = read_data_from_csv('hw.csv')
+
+
+@app.route('/sort_height')
+def sort_height():
+    height = []
+    for row in rows:
+        height.append(float(row[' \"Height(Inches)\"']))
+    return height
+
+
+sort_height()
+
+
+@app.route('/sort_weight')
+def sort_weight():
+    weight = []
+    for row in rows:
+        weight.append(float(row[' \"Weight(Pounds)\"']))
+    return weight
+
+
+@app.route('/avg')
+def avg(h, w):
     r = open('hw.csv', 'r')
-    h = []
-    e = []
-    w = []
 
+    data_size = 0
     for i in r:
-        if i != '\n':
-            if '.' in i.split(',')[1]:
-                h.append(float(i.split(',')[1]))
-            if '.' in i.split(',')[2]:
-                e.append(i.split(',')[2])
-
-    for j in e:
-        if '.' in j.split('\n')[0]:
-            w.append(float(j.split('\n')[0]))
+        if i[0].isnumeric():
+            data_size += 1
 
     h_sum = 0
     for k in h:
@@ -43,11 +74,15 @@ def avg():
     for g in w:
         w_sum += g
 
-    w_avg = (w_sum / 25000) * 0.453
+    w_avg = (w_sum / data_size) * 0.453
 
-    h_avg = (h_sum / 25000) * 2.54
+    h_avg = (h_sum / data_size) * 2.54
+
+    r.close()
+
     return h_avg, w_avg
 
 
-avg()
+print(avg(sort_height(), sort_weight()))
+
 
