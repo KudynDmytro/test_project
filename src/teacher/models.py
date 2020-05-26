@@ -4,6 +4,7 @@ from django.db import models
 
 # Create your models here.
 from faker import Faker
+from student.models import Student
 
 
 class Teacher(models.Model):
@@ -16,13 +17,25 @@ class Teacher(models.Model):
         return f'{self.first_name}, {self.last_name}, {self.birthdate}'
 
     @classmethod
-    def generate_student(cls):
+    def gen_teacher(cls):
         faker = Faker()
 
-        student = Teacher(
+        teacher = Teacher(
             first_name=faker.first_name(),
             last_name=faker.last_name(),
             email=faker.email(),
         )
 
-        student.save()
+        teacher.save()
+
+    # @classmethod
+    # def generate_student(cls):
+    #     faker = Faker()
+    #
+    #     student = Student(
+    #         first_name=faker.first_name(),
+    #         last_name=faker.last_name(),
+    #         email=faker.email(),
+    #     )
+    #
+    #     student.save()
