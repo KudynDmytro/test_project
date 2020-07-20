@@ -1,8 +1,9 @@
-from django.http import HttpResponseRedirect
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render
 from django.urls import reverse
 
-from teacher.forms import TeacherAddForm
+from teacher.forms import TeacherAddForm, TeacherEditForm
 from teacher.models import Teacher
 
 # Create your views here.
@@ -48,5 +49,35 @@ def teacher_add(request):
     return render(
         request=request,
         template_name='teacher_add.html',
-        context={'form': form}
+        context={'form': form
+                 }
     )
+
+
+def teachers_edit(request, id):
+
+    try:
+        teacher = Teacher.objects.get(id=id)
+    except ObjectDoesNotExist:
+        return HttpResponseNotFound(f"Teacher with id={id} doesn't exist")
+
+    if request.method == 'POST':
+        form = TeacherAddForm(request.POST, instance=teacher)
+
+        if form.is_valid():
+            teacher = form.save()
+            print(f'Student created:{teacher}')
+            return HttpResponseRedirect(reverse('teachers'))
+    else:
+        form = TeacherEditForm(
+            instance=teacher
+        )
+
+    return render(
+        request=request,
+        template_name='teacher_edit.html',
+        context={'form': form,
+                 'title': 'Teacher edit'
+                 }
+    )
+

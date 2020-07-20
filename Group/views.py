@@ -1,8 +1,9 @@
-from django.http import HttpResponseRedirect
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render
 from django.urls import reverse
 
-from Group.forms import GroupAddForm
+from Group.forms import GroupAddForm, GroupEditForm
 from Group.models import Group
 
 # Create your views here.
@@ -46,4 +47,31 @@ def group_add(request):
         request=request,
         template_name='group_add.html',
         context={'form': form}
+    )
+
+
+def group_edit(request, id):
+
+    try:
+        group = Group.objects.get(id=id)
+    except ObjectDoesNotExist:
+        return HttpResponseNotFound(f"Group with id={id} doesn't exist")
+
+    if request.method == 'POST':
+        form = GroupEditForm(request.POST, instance=group)
+
+        if form.is_valid():
+            group = form.save()
+            return HttpResponseRedirect(reverse('groups'))
+    else:
+        form = GroupEditForm(
+            instance=group
+        )
+
+    return render(
+        request=request,
+        template_name='group_edit.html',
+        context={'form': form,
+                 'title': 'Group edit'
+                 }
     )

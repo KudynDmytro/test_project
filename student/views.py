@@ -1,8 +1,9 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.urls import reverse
 
-from student.forms import StudentAddForm
+from student.forms import StudentAddForm, StudentEditForm, StudentDeleteForm
 from student.models import Student
 
 # Create your views here.
@@ -31,7 +32,9 @@ def students_list(request):
     return render(
         request=request,
         template_name='students_list.html',
-        context={'students_list': result}
+        context={'students_list': qs,
+                 'title': 'Student list'
+                 }
     )
 
 
@@ -54,5 +57,63 @@ def students_add(request):
     return render(
         request=request,
         template_name='students_add.html',
-        context={'form': form}
+        context={'form': form,
+                 'title': 'Student add'
+                 }
+    )
+
+
+def students_edit(request, id):
+
+    try:
+        student = Student.objects.get(id=id)
+    except ObjectDoesNotExist:
+        return HttpResponseNotFound(f"Student with id={id} doesn't exist")
+
+    if request.method == 'POST':
+        form = StudentEditForm(request.POST, instance=student)
+
+        if form.is_valid():
+            student = form.save()
+            print(f'Student created:{student}')
+            return HttpResponseRedirect(reverse('students'))
+    else:
+        form = StudentEditForm(
+            instance=student
+        )
+
+    return render(
+        request=request,
+        template_name='students_edit.html',
+        context={'form': form,
+                 'title': 'Student edit'
+                 }
+    )
+
+
+def students_delete(request, id):
+
+    try:
+        student = Student.objects.get(id=id)
+    except ObjectDoesNotExist:
+        return HttpResponseNotFound(f"Student with id={id} doesn't exist")
+
+    if request.method == 'POST':
+        form = StudentDeleteForm(request.POST, instance=student)
+
+        if form.is_valid():
+            student = form.save()
+            student.delete()
+            return HttpResponseRedirect(reverse('students'))
+    else:
+        form = StudentEditForm(
+            instance=student
+        )
+
+    return render(
+        request=request,
+        template_name='students_delete.html',
+        context={'form': form,
+                 'title': 'Are you sure, you want to delete this student?'
+                 }
     )
