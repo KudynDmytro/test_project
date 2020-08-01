@@ -2,6 +2,8 @@ asgiref==3.2.7
 backcall==0.1.0
 decorator==4.4.2
 Django==3.0.6
+django-debug-toolbar==2.2
+django-extensions==2.2.9
 entrypoints==0.3
 Faker==4.0.3
 flake8==3.7.9
@@ -13,6 +15,7 @@ parso==0.7.0
 pexpect==4.8.0
 pickleshare==0.7.5
 pkg-resources==0.0.0
+polls==0.1
 prompt-toolkit==3.0.5
 ptyprocess==0.6.0
 pycodestyle==2.5.0

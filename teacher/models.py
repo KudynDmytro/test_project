@@ -1,4 +1,5 @@
 import datetime
+import random
 
 from django.db import models
 
@@ -17,17 +18,21 @@ class Teacher(models.Model):
     group = models.ForeignKey(to=Group, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f'{self.first_name}, {self.last_name}, {self.birthdate}'
+        return f'{self.first_name}, {self.last_name}, {self.email}, {self.birthdate},{self.phone_num}'
 
     @classmethod
-    def gen_teacher(cls):
+    def gen_teacher(cls, groups=None):
         faker = Faker()
+
+        if groups is None:
+            groups = list(Group.objects.all())
 
         teacher = Teacher(
             first_name=faker.first_name(),
             last_name=faker.last_name(),
             email=faker.email(),
-            phone_num=faker.phone_number()
+            phone_num=faker.phone_number(),
+            group=random.choice(groups)
         )
 
         teacher.save()

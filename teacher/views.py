@@ -32,7 +32,8 @@ def teacher_list(request):
     return render(
         request=request,
         template_name='teacher_list.html',
-        context={'teacher_list': result}
+        context={'teacher_list': qs,
+                 'title': 'Teacher list'}
     )
 
 
