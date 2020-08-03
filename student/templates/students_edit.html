@@ -6,7 +6,8 @@
         {% csrf_token %}
         {{ form.as_p }}
 
-        <button type="submit">Save</button><br>
+        <button type="submit">Save</button>
+        <a href="/students/">Cancel</a>
     </form>
 
 {% endblock%}

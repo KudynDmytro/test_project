@@ -18,15 +18,6 @@
         <button type="submit">Search</button><br>
     </form>
 
-    {% for teacher in teacher_list %}
-        {{teacher.id}}
-        <a href="/teacher/edit/{{teacher.id}}">{{teacher.first_name}} {{teacher.last_name}}</a>
-        {{teacher.email}}
-        {{teacher.group.name}}
-        {{teacher.phone_num}}
-        <br>
-    {% empty %}
-        <p>Sorry, list is empty</p>
-    {% endfor %}
+    {% include 'includes/teacher_table.html' %}
 
 {% endblock %}

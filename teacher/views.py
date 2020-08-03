@@ -2,6 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render
 from django.urls import reverse
+from django.views.generic import UpdateView, ListView, CreateView
 
 from teacher.forms import TeacherAddForm, TeacherEditForm
 from teacher.models import Teacher
@@ -43,14 +44,15 @@ def teacher_add(request):
         if form.is_valid():
             teacher = form.save()
             print(f'Teacher created:{teacher}')
-            return HttpResponseRedirect(reverse('teachers'))
+            return HttpResponseRedirect(reverse('teachers:list'))
     else:
         form = TeacherAddForm()
 
     return render(
         request=request,
         template_name='teacher_add.html',
-        context={'form': form
+        context={'form': form,
+                 'title': 'Teacher add'
                  }
     )
 
@@ -68,7 +70,7 @@ def teachers_edit(request, id):
         if form.is_valid():
             teacher = form.save()
             print(f'Student created:{teacher}')
-            return HttpResponseRedirect(reverse('teachers'))
+            return HttpResponseRedirect(reverse('teachers:list'))
     else:
         form = TeacherEditForm(
             instance=teacher
@@ -81,4 +83,39 @@ def teachers_edit(request, id):
                  'title': 'Teacher edit'
                  }
     )
+
+
+class TeacherListView(ListView):
+    model = Teacher
+    template_name = 'teacher_list.html'
+    context_object_name = 'teacher_list'
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.select_related('group')
+        qs = qs.order_by('-id')
+        return qs
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context['title'] = 'Teacher list'
+        return context
+
+
+class TeacherUpdateView(UpdateView):
+    model = Teacher
+    template_name = 'teacher_edit.html'
+    form_class = TeacherEditForm
+
+    def get_success_url(self):
+        return reverse('teachers:list')
+
+
+class TeacherCreateView(CreateView):
+    model = Teacher
+    template_name = 'teacher_add.html'
+    form_class = TeacherAddForm
+
+    def get_success_url(self):
+        return reverse('teachers:list')
 

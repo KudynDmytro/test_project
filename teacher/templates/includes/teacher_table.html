@@ -1,0 +1,28 @@
+{% if teacher_list %}
+    <table border="1px">
+        <tr>
+          <th>ID</th>
+          <th>First name</th>
+          <th>Last name</th>
+          <th>Email</th>
+          <th>Group</th>
+          <th>Course</th>
+{#          <th>🗑</th>#}
+          <th>🖉</th>
+        </tr>
+        {% for teacher in teacher_list %}
+            <tr>
+              <td> {{ teacher.id }}</td>
+              <td> {{ teacher.first_name }}</td>
+              <td> {{ teacher.last_name }}</td>
+              <td> {{ teacher.email }}</td>
+              <td> {{ teacher.phone_num }}</td>
+              <td> {{ teacher.group.name }}</td>
+              <td> {{ teacher.group.course }}</td>
+              <td> <a href="{% url 'teachers:edit' teacher.id %}">EDIT</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>Sorry, list is empty</p>
+{% endif %}

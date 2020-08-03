@@ -5,8 +5,12 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
+        <p>
+            Do you really want to delete user <b> {{ student.full_name }} </b>?
+        </p>
 
-        <button type="submit">Delete</button><br>
+        <button type="submit">Delete</button>
+        <a href="/students/">Cancel</a>
     </form>
 
 {% endblock%}

@@ -1,16 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Groups list</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block content %}
+
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
 
-        <button type="submit">Save</button><br>
+        <button type="submit">Save</button>
+        <a href="/groups/">Cancel</a>
     </form>
 
-</body>
-</html>
+    {% with students_list=group.students.all %}
+        {% include 'includes/students_table.html' %}
+    {% endwith %}
+
+{% endblock%}

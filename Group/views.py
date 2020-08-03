@@ -2,6 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render
 from django.urls import reverse
+from django.views.generic import ListView, UpdateView, CreateView
 
 from Group.forms import GroupAddForm, GroupEditForm
 from Group.models import Group
@@ -13,13 +14,13 @@ def group_list(request):
     qs = Group.objects.all()
 
     if request.GET.get('Id'):
-        qs = qs.filter(first_name=request.GET.get('Id'))
+        qs = qs.filter(name=request.GET.get('Id'))
 
     if request.GET.get('course'):
-        qs = qs.filter(last_name=request.GET.get('course'))
+        qs = qs.filter(course=request.GET.get('course'))
 
     if request.GET.get('email'):
-        qs = qs.filter(email=request.GET.get('email'))
+        qs = qs.filter(classrooom=request.GET.get('email'))
 
     result = '<br>'.join(
         str(group)
@@ -29,7 +30,7 @@ def group_list(request):
     return render(
         request=request,
         template_name='group_list.html',
-        context={'group_list': result}
+        context={'group_list': qs}
     )
 
 
@@ -39,7 +40,7 @@ def group_add(request):
         if form.is_valid():
             group = form.save()
             print(f'Group created:{group}')
-            return HttpResponseRedirect(reverse('groups'))
+            return HttpResponseRedirect(reverse('groups:list'))
     else:
         form = GroupAddForm()
 
@@ -51,7 +52,6 @@ def group_add(request):
 
 
 def group_edit(request, id):
-
     try:
         group = Group.objects.get(id=id)
     except ObjectDoesNotExist:
@@ -62,7 +62,7 @@ def group_edit(request, id):
 
         if form.is_valid():
             group = form.save()
-            return HttpResponseRedirect(reverse('groups'))
+            return HttpResponseRedirect(reverse('groups:list'))
     else:
         form = GroupEditForm(
             instance=group
@@ -72,6 +72,42 @@ def group_edit(request, id):
         request=request,
         template_name='group_edit.html',
         context={'form': form,
-                 'title': 'Group edit'
+                 'title': 'Group edit',
+                 'group': group
                  }
     )
+
+
+class GroupListView(ListView):
+    model = Group
+    template_name = 'group_list.html'
+    context_object_name = 'group_list'
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        # qs = qs.select_related('group')
+        qs = qs.order_by('-id')
+        return qs
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context['title'] = 'Group list'
+        return context
+
+
+class GroupUpdateView(UpdateView):
+    model = Group
+    template_name = 'group_edit.html'
+    form_class = GroupEditForm
+
+    def get_success_url(self):
+        return reverse('groups:list')
+
+
+class GroupCreateView(CreateView):
+    model = Group
+    template_name = 'group_add.html'
+    form_class = GroupAddForm
+
+    def get_success_url(self):
+        return reverse('groups:list')
