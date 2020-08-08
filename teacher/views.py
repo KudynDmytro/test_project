@@ -1,7 +1,8 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import UpdateView, ListView, CreateView
 
 from teacher.forms import TeacherAddForm, TeacherEditForm
@@ -85,10 +86,11 @@ def teachers_edit(request, id):
     )
 
 
-class TeacherListView(ListView):
+class TeacherListView(LoginRequiredMixin, ListView):
     model = Teacher
     template_name = 'teacher_list.html'
     context_object_name = 'teacher_list'
+    login_url = reverse_lazy('account:login')
 
     def get_queryset(self):
         request = self.request
@@ -116,19 +118,21 @@ class TeacherListView(ListView):
         return context
 
 
-class TeacherUpdateView(UpdateView):
+class TeacherUpdateView(LoginRequiredMixin, UpdateView):
     model = Teacher
     template_name = 'teacher_edit.html'
     form_class = TeacherEditForm
+    login_url = reverse_lazy('account:login')
 
     def get_success_url(self):
         return reverse('teachers:list')
 
 
-class TeacherCreateView(CreateView):
+class TeacherCreateView(LoginRequiredMixin, CreateView):
     model = Teacher
     template_name = 'teacher_add.html'
     form_class = TeacherAddForm
+    login_url = reverse_lazy('account:login')
 
     def get_success_url(self):
         return reverse('teachers:list')

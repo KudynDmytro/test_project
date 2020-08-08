@@ -1,7 +1,8 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, UpdateView, CreateView
 
 from Group.forms import GroupAddForm, GroupEditForm
@@ -78,10 +79,11 @@ def group_edit(request, id):
     )
 
 
-class GroupListView(ListView):
+class GroupListView(LoginRequiredMixin, ListView):
     model = Group
     template_name = 'group_list.html'
     context_object_name = 'group_list'
+    login_url = reverse_lazy('account:login')
 
     def get_queryset(self):
         request = self.request
@@ -105,19 +107,21 @@ class GroupListView(ListView):
         return context
 
 
-class GroupUpdateView(UpdateView):
+class GroupUpdateView(LoginRequiredMixin, UpdateView):
     model = Group
     template_name = 'group_edit.html'
     form_class = GroupEditForm
+    login_url = reverse_lazy('account:login')
 
     def get_success_url(self):
         return reverse('groups:list')
 
 
-class GroupCreateView(CreateView):
+class GroupCreateView(LoginRequiredMixin, CreateView):
     model = Group
     template_name = 'group_add.html'
     form_class = GroupAddForm
+    login_url = reverse_lazy('account:login')
 
     def get_success_url(self):
         return reverse('groups:list')

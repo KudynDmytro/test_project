@@ -40,3 +40,8 @@ class Student(models.Model):
 
         student.save()
 
+    def save(self):
+        super().save()
+
+
+

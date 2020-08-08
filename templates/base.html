@@ -53,13 +53,24 @@
                     </li>
                 {% endif %}
             </ul>
-
-<!--            <form class="form-inline my-2 my-lg-0">-->
-<!--                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">-->
-<!--                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
-<!--            </form>-->
         </div>
-</nav>
+    </nav>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            {% if page_obj.has_other_pages%}
+                {% if page_obj.has_previous %}
+                <li class="page-link"><a href="?page=1">&laquo; first</a></li>
+                <li class="page-link"><a href="?page={{ page_obj.previous_page_number }}">previous</a></li>
+                    {% endif %}
+                <a><span class="page-link current"> Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></a>
+
+                    {% if page_obj.has_next %}
+                <li><a class="page-link" href="?page={{ page_obj.next_page_number }}">next</a></li>
+                <li><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a></li>
+                {% endif %}
+            {% endif %}
+        </ul>
+    </nav>
     <h2 class="p-4 mx-auto">{{ title }}</h2>
     <p></p>
     <p></p>
