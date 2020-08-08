@@ -84,9 +84,19 @@ class GroupListView(ListView):
     context_object_name = 'group_list'
 
     def get_queryset(self):
+        request = self.request
         qs = super().get_queryset()
-        # qs = qs.select_related('group')
         qs = qs.order_by('-id')
+
+        if request.GET.get('Id'):
+            qs = qs.filter(id=request.GET.get('Id'))
+
+        if request.GET.get('name'):
+            qs = qs.filter(name__contains=request.GET.get('name'))
+
+        if request.GET.get('course'):
+            qs = qs.filter(course__contains=request.GET.get('course'))
+
         return qs
 
     def get_context_data(self, *, object_list=None, **kwargs):

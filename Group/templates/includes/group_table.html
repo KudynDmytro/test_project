@@ -1,12 +1,13 @@
 {% if group_list %}
-    <table border="1px">
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Floor</th>
-{#          <th>🗑</th>#}
-          <th>🖉</th>
-        </tr>
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Group</th>
+                <th>Course</th>
+                <th>&#9998</th>
+            </tr>
+        </thead>
         {% for group in group_list %}
             <tr>
               <td> {{ group.id }}</td>

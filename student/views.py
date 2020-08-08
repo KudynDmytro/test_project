@@ -74,8 +74,7 @@ def students_edit(request, id):
         form = StudentEditForm(request.POST, instance=student)
 
         if form.is_valid():
-            student = form.save()
-            print(f'Student created:{student}')
+            form.save()
             return HttpResponseRedirect(reverse('students:list'))
     else:
         form = StudentEditForm(
@@ -125,9 +124,22 @@ class StudentsListView(ListView):
     context_object_name = 'students_list'
 
     def get_queryset(self):
+        request = self.request
         qs = super().get_queryset()
-        qs = qs.select_related('group')
-        qs = qs.order_by('-id')
+        qs = qs.select_related('group').order_by('-id')
+
+        if request.GET.get('fname'):
+            qs = qs.filter(first_name__contains=request.GET.get('fname'))
+
+        if request.GET.get('lname'):
+            qs = qs.filter(last_name__contains=request.GET.get('lname'))
+
+        if request.GET.get('email'):
+            qs = qs.filter(email__contains=request.GET.get('email'))
+
+        if request.GET.get('pnum'):
+            qs = qs.filter(phone_num__contains=request.GET.get('pnum'))
+
         return qs
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -143,6 +155,11 @@ class StudentsUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse('students:list')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context['title'] = 'Edit student'
+        return context
 
 
 class StudentsCreateView(CreateView):

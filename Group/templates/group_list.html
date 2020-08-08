@@ -1,21 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Group list</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+
+{% block content %}
     <form>
-        <label for="Id">Id:</label><br>
-        <input type="text" id="Id" name="Id"><br>
-        <label for="name">Name:</label><br>
-        <input type="text" id="name" name="name"><br>
-        <label for="floor">Floor:</label><br>
-        <input type="text" id="floor" name="floor"><br>
-        <button type="submit">Search</button><br>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Id</span>
+            </div>
+            <input name="id" type="text" class="form-control" placeholder="Id" aria-label="id" aria-describedby="basic-addon1">
+
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Group</span>
+            </div>
+            <input name="group" type="text" class="form-control" placeholder="Group" aria-label="group" aria-describedby="basic-addon1">
+
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Course</span>
+            </div>
+            <input name="course" type="text" class="form-control" placeholder="Course" aria-label="course" aria-describedby="basic-addon1">
+
+            <button type="submit" class="btn btn-success">Search</button><br>
+        </div>
+
     </form>
 
-{% include 'includes/group_table.html' %}
+    {% include 'includes/group_table.html' %}
 
-</body>
-</html>
+{% endblock %}

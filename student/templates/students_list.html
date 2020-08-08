@@ -3,19 +3,32 @@
 
 {% block content %}
     <form>
-        <label for="fname">First name:</label><br>
-        <input type="text" id="fname" name="fname"><br>
 
-        <label for="lname">Last name:</label><br>
-        <input type="text" id="lname" name="lname"><br>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">First name</span>
+            </div>
+            <input name="fname" type="text" class="form-control" placeholder="First name" aria-label="firstname" aria-describedby="basic-addon1">
 
-        <label for="email">Email:</label><br>
-        <input type="text" id="email" name="email"><br>
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Last name</span>
+            </div>
+            <input name="lname" type="text" class="form-control" placeholder="Last name" aria-label="lastname" aria-describedby="basic-addon1">
 
-        <label for="pnum">Phone number:</label><br>
-        <input type="text" id="pnum" name="pnum"><br>
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Email</span>
+            </div>
+            <input name="email" type="text" class="form-control" placeholder="Email" aria-label="email" aria-describedby="basic-addon1">
 
-        <button type="submit">Search</button><br>
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Phone number</span>
+            </div>
+            <input name="pnum" type="text" class="form-control" placeholder="Phone number" aria-label="phonenumber" aria-describedby="basic-addon1">
+
+            <button type="submit" class="btn btn-success">Search</button><br>
+        </div>
+
+
     </form>
 
 

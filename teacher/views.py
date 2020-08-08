@@ -91,9 +91,23 @@ class TeacherListView(ListView):
     context_object_name = 'teacher_list'
 
     def get_queryset(self):
+        request = self.request
         qs = super().get_queryset()
         qs = qs.select_related('group')
         qs = qs.order_by('-id')
+
+        if request.GET.get('fname'):
+            qs = qs.filter(first_name__contains=request.GET.get('fname'))
+
+        if request.GET.get('lname'):
+            qs = qs.filter(last_name__contains=request.GET.get('lname'))
+
+        if request.GET.get('email'):
+            qs = qs.filter(email__contains=request.GET.get('email'))
+
+        if request.GET.get('pnum'):
+            qs = qs.filter(phone_num__contains=request.GET.get('pnum'))
+
         return qs
 
     def get_context_data(self, *, object_list=None, **kwargs):

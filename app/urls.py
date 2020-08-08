@@ -14,22 +14,30 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from student.views import students_list, students_add, students_edit, students_delete
-from teacher.views import teacher_list, teacher_add, teachers_edit
-from Group.views import group_list, group_add, group_edit
+from django.urls import path, include
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', admin.site.urls),
-    path('students/', students_list, name='students'),
-    path('students/add/', students_add),
-    path('students/delete/<int:id>', students_delete),
-    path('students/edit/<int:id>', students_edit),
-    path('teachers/', teacher_list, name='teachers'),
-    path('teachers/add/', teacher_add),
-    path('teachers/edit/<int:id>', teachers_edit),
-    path('group/edit/<int:id>', group_edit),
-    path('group/', group_list, name='groups'),
-    path('group/add/', group_add),
+
+    path('students/', include('student.urls')),
+
+    path('account/', include('user_account.urls')),
+
+    path('', TemplateView.as_view(template_name='index.html'), name='index'),
+
+    path('groups/', include('Group.urls')),
+
+    path('teachers/', include('teacher.urls'))
 ]
+
+
+from django.conf import settings
+from django.urls import include, path
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
+
