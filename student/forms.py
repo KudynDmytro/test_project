@@ -16,7 +16,7 @@ class StudentAddForm(StudentBaseForm):
 
 class StudentEditForm(StudentBaseForm):
 
-    def _post_clean(self):
+    def _clean_form(self):
         fname1 = self.instance.first_name
         lname1 = self.instance.last_name
         fname = self.cleaned_data['first_name']
