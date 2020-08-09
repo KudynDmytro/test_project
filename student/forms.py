@@ -16,7 +16,7 @@ class StudentAddForm(StudentBaseForm):
 
 class StudentEditForm(StudentBaseForm):
 
-    def _clean_form(self):
+    def clean(self):
         fname1 = self.instance.first_name
         lname1 = self.instance.last_name
         fname = self.cleaned_data['first_name']
@@ -24,11 +24,11 @@ class StudentEditForm(StudentBaseForm):
         s = Student.objects.filter(first_name=fname, last_name=lname).exists()
 
         if fname == fname1 and lname == lname1:
-            return fname, lname
+            return self.cleaned_data
         elif s is True:
             raise ValidationError("Student with such name already exists")
         else:
-            return fname, lname
+            return self.cleaned_data
 
     def clean_email(self):
         email1 = self.instance.email
