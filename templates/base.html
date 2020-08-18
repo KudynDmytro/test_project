@@ -38,6 +38,9 @@
 
             <ul class="navbar-nav">
                 {% if user.is_authenticated %}
+                    <li class="img-circle.vert">
+                        <img class="rounded-circle p-1 m-1" width="40" height="40" src="{{ user.profile.image.url }}">
+                    </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="{% url 'account:profile' %}">Profile ({{ user.username }})</a>
                     </li>
