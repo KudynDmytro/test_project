@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css" integrity="sha384-VCmXjywReHh4PwowAiWNagnWcLhlEJLA5buUprzK8rxFgeH0kww/aWY76TfkUoSX" crossorigin="anonymous">
+
+
+</head>
+
+
+<body>
+
+<!--<h1>LMS</h1>-->
+
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+        <a class="navbar-brand" href="{% url 'root' %}">Account app</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+                {% if user.is_authenticated %}
+                    <li class="img-circle.vert">
+                        <img class="rounded-circle p-1 m-1" width="40" height="40" src="{{ user.profile.image.url }}">
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'acc:profile' %}">Profile ({{ user.username }})</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'acc:logout' %}">logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'acc:registration' %}">Register <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'acc:login' %}">Login</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <h2 class="p-4 mx-auto">{{ title }}</h2>
+    <p></p>
+    <p></p>
+    {% block content %}
+    {% endblock %}
+</div>
+
+
+</body>
+
+
+</html>
